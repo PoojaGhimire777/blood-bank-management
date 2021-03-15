@@ -6,4 +6,4 @@ import "./index.css";
 ReactDOM.render(
   <Main/>, 
   document.getElementById("root")
-);git
+);
