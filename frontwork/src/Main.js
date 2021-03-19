@@ -8,9 +8,12 @@ import Home from "./Home";
 import Stuff from "./Stuff";
 import Contact from "./Contact";
 import Login from "./Login";
+import "./index.css";
 
  
 class Main extends Component {
+
+  
   render() {
     return (
       <HashRouter>
@@ -26,11 +29,14 @@ class Main extends Component {
           <Route exact path="/" component={Home}/>
             <Route path="/stuff" component={Stuff}/>
             <Route path="/contact" component={Contact}/>
-            <Route path="/Login" component={Login}/>
+           <Route path="/Login" component={Login}/>
              
           </div>
         </div>
+        
         </HashRouter>
+
+
     );
   }
 }
