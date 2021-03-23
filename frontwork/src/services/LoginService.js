@@ -11,9 +11,12 @@ class LoginService {
         return axios.get("http://localhost:8080/user/authenticate?username="+username+"&role=" +role+"&password="+password);
      
 
-        //return axios.get("http://localhost:8080/admin/getAllDonor");
     }
-  
+    getallDonor(){
+                return axios.get("http://localhost:8080/admin/getAllDonor");
+
+
+    }
 }
 
 export default new LoginService()
