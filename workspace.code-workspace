@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "blood-bank-management",
+			"path": "blood-bank-management"
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
