@@ -1,19 +1,48 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
  
 class Stuff extends Component {
   render() {
     return (
       <div>
-        <h2>LOGIN(ADMIN/USER)</h2>
-        <p>Blood bank management system project is a web based project that is designed on JAVA SPRINGBOOT AND REACT-JS with database MYSQL. This project helps in managing various blood bank operations effectively. There are several features such as patient name, contacts, blood booking and requirements of blood group etc. This project also helps people find blood donors in times of need. There are two types of logins first one is admin and another one is user. Admin has full control of the system like add ,delete, manage add state, members and city. User can see request for blood and donate blood. This project is designed very simple and you can understand easily.</p>
-        <h2>Modules of blood bank project system</h2>
-        <ol>
-          <li>Login/register: can login into system.</li>
-          <li>Admin panel: he can see add , delete and update details.</li>
-          <li>Request for blood: user can request here for blood.</li>
-          <li>Donate blood: can donate blood</li>
-          <li>Manage: manage members, city and add state.</li>
-        </ol>
+      <div>
+
+         <ul className="header">
+          <li><NavLink exact to="/">Home</NavLink></li>
+          
+            <li><NavLink to="/stuff">About</NavLink></li>
+            <li><NavLink to="/contact">Contact</NavLink></li>
+            <li><NavLink to="/Login">Login</NavLink></li>
+          </ul> 
+               <div>
+               <div className = "container">
+                        <div className = "row">
+                            <div className = "card col-md-7 offset-md-4 offset-md-3">
+                                {/* <h2 className="text-center">Add Donor</h2> */}
+                                    <div className="card-body">
+          </div>
+        <h2>About Us</h2>
+        <h6>You Have the Power to Save a Life.</h6>
+        <p>Immerse yourself in an interactive experience. 
+          Explore and learn how to help yourself and help save others, every day.</p>
+       
+       <p>Each day, thousands of people – people just like you – 
+provide compassionate care to those in need. Our network of generous
+ donors, volunteers and employees share a mission of 
+preventing and relieving suffering, here at home and around 
+
+the world.
+
+We roll up our sleeves and donate time, money and blood.
+
+ We learn or teach life-saving skills so our communities can
+ be better prepared when the need arises.</p>
+       
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
       </div>
     );
   }

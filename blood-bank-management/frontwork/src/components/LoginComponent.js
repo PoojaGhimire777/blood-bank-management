@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import axios from 'axios'
-import LoginService  from '../services/LoginService';
+import { NavLink } from "react-router-dom";
+// import axios from 'axios'
+
+ import LoginService  from "../services/LoginService";
 
 
- class LoginComponent extends Component {
+ class Login extends Component {
     
   constructor(props) {
     super(props)
@@ -33,13 +35,12 @@ changePasswordHandler= (event) => {
 handleChange= (event) => {
   this.setState({role: event.target.value});
 }
+
 loginClicked() {
- 
-  
 LoginService.adminLogin(this.state.username,this.state.password,this.state.role).then(resp => {
   console.log(resp.data);
   if(resp.status === 200){
-    this.props.history.push('/welcome');
+    this.props.history.push('/donor');
   }
   else{
      
@@ -50,17 +51,28 @@ LoginService.adminLogin(this.state.username,this.state.password,this.state.role)
   //   errorMessage();
   // }
 })
-
- 
 }
     render() {
       
         return (
         <div className="base-container" ref={this.props.containerRef}>
-          
-      
+          <div>
+            <ul className="header">
+                <li><NavLink exact to="/">Home</NavLink></li>
+                <li><NavLink to="/stuff">About</NavLink></li>
+                <li><NavLink to="/contact">Contact</NavLink></li>
+                <li><NavLink to="/Login">Login</NavLink></li>
+            </ul> 
+            <div>
+               <div className = "container">
+                        <div className = "row">
+                            <div className = "card col-md-3 offset-md-5 offset-md-4">
+                                {/* <h2 className="text-center">Add Donor</h2> */}
+                                    <div className="card-body">
+                                    
+          </div>
           <label>
-        Login As:
+          Login As:
           <select role={this.state.role} onChange={this.handleChange} >
               <option role="select" >SELECT ONE </option>  
               <option role="admin"> ADMIN </option>  
@@ -73,7 +85,7 @@ LoginService.adminLogin(this.state.username,this.state.password,this.state.role)
             
           <div className="form">
             <div className="form-group">
-              <label htmlFor="username">Username: </label>
+              <label htmlFor="username">Username : </label>
               <input type="text" name="username" placeholder="Username" 
               value={this.state.username} onChange={this.changeUserNameHandler}/>
             </div>
@@ -91,7 +103,12 @@ LoginService.adminLogin(this.state.username,this.state.password,this.state.role)
           </button>
         </div>
         </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
     );
     }
 }
-export default LoginComponent;
+export default Login;
