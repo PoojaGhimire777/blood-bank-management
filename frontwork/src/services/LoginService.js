@@ -1,22 +1,18 @@
 import axios from 'axios';
+import { Component } from 'react';
 
-const USER_API_BASE_URL = "http://localhost:8080/";
+class LoginService extends Component {
 
-class LoginService {
-
-    
 
     adminLogin(username,password,role){
-       // adminLogin(){
+       
         return axios.get("http://localhost:8080/user/authenticate?username="+username+"&role=" +role+"&password="+password);
-     
-
     }
-    getallDonor(){
-                return axios.get("http://localhost:8080/admin/getAllDonor");
 
-
+    createUser(user){
+        return axios.post("http://localhost:8080/user/createUser",user);
     }
 }
+
 
 export default new LoginService()

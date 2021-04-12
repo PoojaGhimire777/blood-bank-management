@@ -3,11 +3,12 @@ import { NavLink } from 'react-router-dom';
 import "../index.css";
 import AdminService from '../services/AdminService';
 
-class CreateDonor extends Component {
+class UpdateDonor extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
+            id: this.props.match.params.id,
             firstName: '',
             lastName: '',
             emailId: '',
@@ -18,33 +19,38 @@ class CreateDonor extends Component {
             address: '',
             city: '',
             state: '',
-            pincode: '',
-            fields: {},
-            errors: {},
-            BarStyling2: {width:"31rem", border:"none", padding:"0.5rem"},
-            BarStyling3: {background:"#BF222B", color:"white",padding:"0.5rem" }
+            pincode: ''
 
         }
-        this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
-        this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
-        this.saveOrUpdateDonor = this.saveOrUpdateDonor.bind(this);
-        this.changeEmailHandler = this.changeEmailHandler.bind(this);
-        this.changeDOBHandler = this.changeDOBHandler.bind(this);
-        this.changegenderHandler = this.changegenderHandler.bind(this);
-        this.changebloodgroupHandler = this.changebloodgroupHandler.bind(this);
-        this.changecontactNumberHandler = this.changecontactNumberHandler.bind(this);
-        this.changeaddressHandler = this.changeaddressHandler.bind(this);
-        this.changecityHandler = this.changecityHandler.bind(this);
-        this.changestateHandler = this.changestateHandler.bind(this);
-        this.changepincodeHandler = this.changepincodeHandler.bind(this);
+         this.changeFirstNameHandler = this.changeFirstNameHandler.bind(this);
+         this.changeLastNameHandler = this.changeLastNameHandler.bind(this);
+         this.updateDonor = this.updateDonor.bind(this);
+         this.cancel = this.cancel.bind(this);
 
-        
     }
+    componentDidMount(){
+        AdminService.getDonorById(this.state.id).then( (resp) =>{
+            let donor = resp.data;
+            this.setState({firstName: donor.firstName,
+                lastName: donor.lastName,
+                emailId : donor.emailId,
+                dateOfBirth: donor.dateOfBirth,
+                gender: donor.gender,
+                bloodGroup: donor.bloodGroup,
+                contactNumber: donor.contactNumber,
+                address: donor.address,
+                city: donor.city,
+                state: donor.state,
+                pincode: donor.pincode
+            });
+        });
+    }
+
    
-    saveOrUpdateDonor = (e) => {
+
+    updateDonor = (e) => {
         e.preventDefault();
-        let 
-            donor = {firstName: this.state.firstName, 
+        let donor = {firstName: this.state.firstName, 
             lastName: this.state.lastName, 
             emailId: this.state.emailId, 
             dateOfBirth: this.state.dateOfBirth,
@@ -56,46 +62,21 @@ class CreateDonor extends Component {
             state: this.state.state,
             pincode:this.state.pincode};
             console.log('donor => ' + JSON.stringify(donor));
-           
-          //   AdminService.createDonor(donor).then(resp =>{
-          //     console.log(resp.data);
-          //     if(resp.status === 200){
-          //       this.props.history.push('/Donor');
-          //       alert("Donor Created");
-          //     }
-          //     else{
-          //       alert("error");
-          //     }
-          //   // this.props.history.push('/Donor');
-          // });
-            if(this.state.firstName==='' || 
-            this.state.lastName==='' ||
-            this.state.emailId==='' || 
-            this.state.gender==='' || 
-            this.state.dateOfBirth==='' || 
-            this.state.bloodGroup==='' || 
-            this.state.contactNumber==='' || 
-            this.state.address==='' || 
-            this.state.city==='' || 
-            this.state.state==='' || 
-            this.state.pincode===''
-            ){
-              alert("Please provide all required options");
-              return;
-            }
-            AdminService.createDonor(donor).then(resp =>{
-                  console.log(resp.data);
-                  // if(resp.status === 200){
-                    this.props.history.push('/Donor');
-                    alert("Donor Created");
-                  // }
-                  
-              });
+        console.log('id => ' + JSON.stringify(this.state.id));
+        AdminService.updateDonor(donor, this.state.id).then( resp => {
+            console.log(resp.data);
+  if(resp.status === 200){
+    this.props.history.push('/donor');
+    alert("User Updated");
+  }
+  if (resp.status === null){
+    alert("error");
+  }
 
-            
-            
+            // this.props.history.push('/donor');
+        });
     }
-
+    
     changeFirstNameHandler= (event) => {
         this.setState({firstName: event.target.value});
         if(event.target.name==='firstName'){
@@ -272,44 +253,40 @@ class CreateDonor extends Component {
           }
     
     }
-    
+
+    cancel(){
+        this.props.history.push('/allDonor');
+    }
+
+    render() {
+        return (
+            <div>
             
- render() { 
-    return (
-        <div>
-            <br></br>
+            
             <ul className="header"> 
           
           <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink exact to="/Donor">Donor</NavLink></button></li>
           <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink to ="/search">Search Donor</NavLink></button></li>
           <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink to ="/Stock">Stock</NavLink></button></li>
-          <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink to ="/showrequest">Show Requests</NavLink></button></li>
-
-          <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink to ="/exit">LogOut</NavLink></button></li>
+          <li><button style={{marginLeft: "5px"}} className="btn btn-danger"><NavLink to ="/exit">Exit</NavLink></button></li>
 
          </ul>
         <div className = "container">
-        <div class="div divtable accordion " style={this.state.BarStyling3 } >
-          <div class="tr" align="center">
-            <b><i class="fas fa-hand-holding-water" aria-hidden="true"></i> Online Donation Request</b>
-          </div>
-         </div>
-         <br></br>
             <div className = "row">
                 <div className = "card col-md-6 offset-md-3 offset-md-3">
-                    <h2 className="text-center">Add Donor</h2>
+                    <h2 className="text-center">Update Donor</h2>
                         <div className="card-body">
                             <form>
-                                <div className = "form-group">
+                            <div className = "form-group">
                                     <label> First Name: </label>
                                         <input placeholder="First Name" name="firstName" className="form-control" 
-                                           value={this.state.firstName} onChange={this.changeFirstNameHandler} required/>
+                                           value={this.state.firstName} onChange={this.changeFirstNameHandler}/>
                                                 {this.state.firstNameError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
                                 <div className = "form-group">
                                     <label> Last Name: </label>
                                         <input placeholder="Last Name" name="lastName" className="form-control" 
-                                            value={this.state.lastName} onChange={this.changeLastNameHandler} required/>
+                                            value={this.state.lastName} onChange={this.changeLastNameHandler}/>
                                              {this.state.lastNameError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
                                 
@@ -325,14 +302,14 @@ class CreateDonor extends Component {
                                     <input  type="date" id="start" name="dateOfBirth"
                                                  value="2018-07-22"
                                                  min="1950-01-01" max="2030-12-31" className="form-control" 
-                                                 value={this.state.dateOfBirth} onChange={this.changeDOBHandler} required/>
+                                                 value={this.state.dateOfBirth} onChange={this.changeDOBHandler}></input>
                                      
                                        
                                 </div>
                                 
                                 <div className = "form-group">
                                     <label> BLOOD GROUP: </label>
-                                    <select bloodGroup={this.state.bloodGroup} className="form-control" onChange={this.changebloodgroupHandler} required >
+                                    <select bloodGroup={this.state.bloodGroup} className="form-control" onChange={this.changebloodgroupHandler} >
                             
                             <option value="" >Select Blood Group </option>  
                             <option value="A+" >A+ </option>  
@@ -350,7 +327,7 @@ class CreateDonor extends Component {
                                 <div className = "form-group">
                                     <label> GENDER: </label>
                                    
-                                            <select gender={this.state.gender}  onChange={this.changegenderHandler} required className="form-control" >
+                                            <select gender={this.state.gender}  onChange={this.changegenderHandler} className="form-control" >
                                               <option value="" >Select Gender </option>  
                                               <option value="male" >Male </option>  
                                               <option value="female">Female </option>  
@@ -360,24 +337,24 @@ class CreateDonor extends Component {
                                 <div className = "form-group">
                                     <label> Contact Number: </label>
                                         <input  placeholder="Contact Number" name="contactNumber" className="form-control" 
-                                            value={this.state.contactNumber} onChange={this.changecontactNumberHandler} required/>
+                                            value={this.state.contactNumber} onChange={this.changecontactNumberHandler}/>
                                              {this.state.contactNumberError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
                                 <div className = "form-group">
                                     <label> Address: </label>
                                         <input placeholder="Address" name="Address" className="form-control" 
-                                            value={this.state.address} onChange={this.changeaddressHandler} required/>
+                                            value={this.state.address} onChange={this.changeaddressHandler}/>
                                              {this.state.addressError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
                                 <div className = "form-group">
                                     <label> City: </label>
                                         <input placeholder="City" name="city" className="form-control" 
-                                            value={this.state.city} onChange={this.changecityHandler} required/>
+                                            value={this.state.city} onChange={this.changecityHandler}/>
                                              {this.state.cityError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
                                 <div className = "form-group">
                                     <label> State: </label>
-                                    <select name="donorState" class="form-control" tabindex="1" value={this.state.state} onChange={this.changestateHandler} required>
+                                    <select name="donorState" class="form-control" tabindex="1" value={this.state.state} onChange={this.changestateHandler}>
                                               
                                             <option value="">Select State</option>
                                             <option value="Andaman Nicobar Islands">Andaman &amp; Nicobar Islands</option>
@@ -422,11 +399,11 @@ class CreateDonor extends Component {
                                 <div className = "form-group">
                                     <label> Pincode: </label>
                                         <input placeholder="Pincode" name="pincode" className="form-control" 
-                                            value={this.state.pincode} onChange={this.changepincodeHandler} required/>
+                                            value={this.state.pincode} onChange={this.changepincodeHandler}/>
                                              {this.state.pincodeError ? <span style={{color: "red"}}>Please Enter some value</span> : ''}
                                 </div>
-                                <button className="btn btn-success" onClick={this.saveOrUpdateDonor}>Save</button>
-                                <button className="btn btn-danger" style={{marginLeft: "10px"}}>Cancel</button>
+                                <button className="btn btn-success" onClick={this.updateDonor}>Save</button>
+                                <button className="btn btn-danger" onClick={this.cancel} style={{marginLeft: "10px"}}>Cancel</button>
 
                             </form>
                         </div>
@@ -436,10 +413,8 @@ class CreateDonor extends Component {
 
         </div>
         </div>
-      )
-
-     }
+        )
+    }
 }
 
-export default CreateDonor
-
+export default UpdateDonor
